@@ -31,6 +31,9 @@ class TreatmentOption(BaseModel):
     indication: str
     therapy: str
     protocol: str
+    drug_database_id: str = ""
+    regimen_context: str = ""
+    label_status: str = ""
     dose: str = ""
     route: str = ""
     frequency: str = ""
