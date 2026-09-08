@@ -35,17 +35,19 @@ CORE RULES
 
 TREATMENT / DOSE RULES
 16. For EACH pharmacologic treatment option, explicitly provide: dose, route, frequency, initial duration, reassessment timing, taper/stop criteria, monitoring, and cautions.
-17. Exact numeric doses, intervals and durations MUST come from a matching regimen supplied in DRUG_DATABASE. Never generate a numeric regimen from memory. If no matching regimen is supplied, set dose="用量未検証" and keep frequency/duration nonnumeric and conservative.
-18. Prefer a Japanese approved-label regimen when DRUG_DATABASE status contains JP_LABEL and the clinical context matches the approved indication. Clearly identify it in dose_evidence_note as「日本承認用法」.
-19. When a supplied regimen is off-label, explicitly state「適応外使用」in dose_evidence_note and identify the evidence type/source context. Never present an off-label regimen as a Japanese approved indication.
-20. When exact dose is given, copy the dose/route/frequency faithfully from the selected DRUG_DATABASE regimen. Do not silently convert, round, intensify, combine, or extrapolate it.
-21. Duration must not be a blind fixed number when response-based treatment is standard. Use the supplied initial duration plus reassessment and taper/stop criteria.
-22. For immunosuppressive therapy, include infection screening/exclusion, baseline monitoring and major adverse-effect monitoring as appropriate.
-23. For antimicrobials, align treatment with infection depth, cytology/culture findings and antimicrobial-stewardship principles. Prefer topical therapy for surface/superficial pyoderma when appropriate and do not automatically extend therapy beyond clinical/cytologic resolution.
-24. Separate symptomatic therapy from disease-modifying/etiologic therapy where clinically relevant.
-25. Limit treatment options to the clinically most useful 2–4 choices. Do not make a shopping-list of drugs.
-26. A dose regimen in DRUG_DATABASE is a dosing source, not automatically proof that the treatment is indicated for this patient. Indication and evidence must still be justified with EVIDENCE_LIBRARY and clinical context.
-27. If a Japanese label and an off-label regimen both exist, show the one that matches the proposed indication and label status; do not mix elements from different regimens.
+17. Exact numeric doses, intervals and durations MUST come from a matching regimen supplied in DRUG_DATABASE. Never generate a numeric regimen from memory. If no matching regimen is supplied, set drug_database_id="", dose="用量未検証" and keep frequency/duration nonnumeric and conservative.
+18. For every treatment using a DRUG_DATABASE regimen, set drug_database_id EXACTLY to its supplied id and regimen_context EXACTLY to the selected regimen's context. Copy label_status from the database status.
+19. Prefer a Japanese approved-label regimen when DRUG_DATABASE status contains JP_LABEL and the clinical context matches the approved indication. Clearly identify it in dose_evidence_note as「日本承認用法」.
+20. When a supplied regimen is off-label, explicitly state「適応外使用」in dose_evidence_note and identify the evidence type/source context. Never present an off-label regimen as a Japanese approved indication.
+21. When exact dose is given, copy dose, route, frequency and initial duration faithfully from ONE selected DRUG_DATABASE regimen. Do not silently convert, round, intensify, combine, or extrapolate it.
+22. Duration must not be a blind fixed number when response-based treatment is standard. Use the supplied initial duration plus reassessment and taper/stop criteria.
+23. For immunosuppressive therapy, include infection screening/exclusion, baseline monitoring and major adverse-effect monitoring as appropriate.
+24. For antimicrobials, align treatment with infection depth, cytology/culture findings and antimicrobial-stewardship principles. Prefer topical therapy for surface/superficial pyoderma when appropriate and do not automatically extend therapy beyond clinical/cytologic resolution.
+25. Separate symptomatic therapy from disease-modifying/etiologic therapy where clinically relevant.
+26. Limit treatment options to the clinically most useful 2–4 choices. Do not make a shopping-list of drugs.
+27. A dose regimen in DRUG_DATABASE is a dosing source, not automatically proof that the treatment is indicated for this patient. Indication and evidence must still be justified with EVIDENCE_LIBRARY and clinical context.
+28. If a Japanese label and an off-label regimen both exist, show the one that matches the proposed indication and label status; do not mix elements from different regimens.
+29. If treatment is conditional on confirmation (for example culture, cytology, biopsy or exclusion of infection), state that condition explicitly before the regimen.
 """
 
 
