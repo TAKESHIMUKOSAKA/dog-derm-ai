@@ -1,0 +1,111 @@
+[
+  {
+    "id": "ISCAID_PYODERMA_2025",
+    "topics": ["pyoderma", "superficial pyoderma", "deep pyoderma", "bacterial folliculitis", "抗菌薬", "膿皮症"],
+    "title": "Antimicrobial use guidelines for canine pyoderma by the International Society for Companion Animal Infectious Diseases (ISCAID)",
+    "citation": "Loeffler A, et al. Vet Dermatol. 2025;36(3):234-282. doi:10.1111/vde.13342",
+    "url": "https://pubmed.ncbi.nlm.nih.gov/40338805/",
+    "evidence_type": "Clinical guideline + systematic literature review + consensus",
+    "grade_hint": "A",
+    "key_points": [
+      "Cytology is central to diagnosis and antimicrobial decision-making.",
+      "Topical antimicrobial therapy is preferred where appropriate for surface/superficial pyoderma.",
+      "Systemic antimicrobials should be reserved for cases where topical therapy is insufficient or impractical, especially deep disease.",
+      "Underlying causes of recurrent pyoderma should be investigated."
+    ]
+  },
+  {
+    "id": "WAVD_DERMATOPHYTOSIS_2017",
+    "topics": ["dermatophytosis", "Microsporum", "Trichophyton", "皮膚糸状菌"],
+    "title": "Diagnosis and treatment of dermatophytosis in dogs and cats: Clinical Consensus Guidelines of the World Association for Veterinary Dermatology",
+    "citation": "Moriello KA, et al. Vet Dermatol. 2017;28(3):266-e68. doi:10.1111/vde.12440",
+    "url": "https://pubmed.ncbi.nlm.nih.gov/28516493/",
+    "evidence_type": "Clinical consensus guideline",
+    "grade_hint": "B",
+    "key_points": [
+      "Diagnosis should integrate clinical findings with fungal testing rather than relying on lesion appearance alone.",
+      "Systemic and topical therapy are generally used together for generalized dermatophytosis.",
+      "Environmental decontamination is an important component of management."
+    ]
+  },
+  {
+    "id": "WAVD_DEMODICOSIS_2020",
+    "topics": ["demodicosis", "Demodex", "ニキビダニ", "毛包虫"],
+    "title": "Diagnosis and treatment of demodicosis in dogs and cats: Clinical consensus guidelines of the World Association for Veterinary Dermatology",
+    "citation": "Mueller RS, et al. Vet Dermatol. 2020;31(1):5-27. doi:10.1111/vde.12806",
+    "url": "https://pubmed.ncbi.nlm.nih.gov/31957202/",
+    "evidence_type": "Clinical consensus guideline with literature review",
+    "grade_hint": "B",
+    "key_points": [
+      "Deep skin scrapings are a diagnostic gold standard, with trichograms/tape-squeeze preparations useful in selected cases.",
+      "Isoxazolines have demonstrated good efficacy for canine demodicosis.",
+      "Adult-onset generalized demodicosis warrants evaluation for underlying immunosuppressive disease."
+    ]
+  },
+  {
+    "id": "ICADA_CAD_DIAGNOSIS_2015",
+    "topics": ["atopic dermatitis", "canine atopic dermatitis", "allergy", "アトピー", "アレルギー"],
+    "title": "Canine atopic dermatitis: detailed guidelines for diagnosis and allergen identification",
+    "citation": "Hensel P, et al. BMC Vet Res. 2015;11:196. doi:10.1186/s12917-015-0515-5",
+    "url": "https://pubmed.ncbi.nlm.nih.gov/26260508/",
+    "evidence_type": "ICADA diagnostic guideline",
+    "grade_hint": "B",
+    "key_points": [
+      "Canine atopic dermatitis is a clinical diagnosis requiring exclusion of mimicking/overlapping conditions.",
+      "Flea assessment, skin scraping and cytology are used as indicated in the work-up.",
+      "Elimination diet trials are required in appropriate perennial pruritus/concurrent GI cases before attributing signs solely to environmental allergy."
+    ]
+  },
+  {
+    "id": "ICADA_CAD_TREATMENT_2015",
+    "topics": ["atopic dermatitis", "canine atopic dermatitis", "oclacitinib", "cyclosporine", "glucocorticoid", "アポキル", "アトピー"],
+    "title": "Treatment of canine atopic dermatitis: 2015 updated guidelines from the International Committee on Allergic Diseases of Animals (ICADA)",
+    "citation": "Olivry T, et al. BMC Vet Res. 2015;11:210. doi:10.1186/s12917-015-0514-6",
+    "url": "https://pubmed.ncbi.nlm.nih.gov/26276051/",
+    "evidence_type": "ICADA treatment guideline",
+    "grade_hint": "B",
+    "key_points": [
+      "Acute flares require identification/removal of flare factors plus antipruritic/anti-inflammatory treatment.",
+      "Oclacitinib and glucocorticoids are among options for acute flare control.",
+      "Long-term management is multimodal and includes trigger control, skin care and evidence-supported anti-inflammatory therapy."
+    ]
+  },
+  {
+    "id": "PRURITUS_GUIDELINE_2022",
+    "topics": ["pruritus", "oclacitinib", "lokivetmab", "cyclosporine", "glucocorticoid", "掻痒", "痒み"],
+    "title": "Clinical Guidelines for the Use of Antipruritic Drugs in the Control of the Most Frequent Pruritic Skin Diseases in Dogs",
+    "citation": "Souza CP, et al. Animals (Basel). 2022;12(8):984. PMID:35448647",
+    "url": "https://pubmed.ncbi.nlm.nih.gov/35448647/",
+    "evidence_type": "Evidence-graded clinical review/guideline using SORT",
+    "grade_hint": "B",
+    "key_points": [
+      "Evidence and recommendations differ by disease context; symptomatic antipruritic therapy should not replace etiologic work-up.",
+      "Glucocorticoids, ciclosporin, oclacitinib and lokivetmab have varying evidence-supported roles in common canine pruritic diseases."
+    ]
+  },
+  {
+    "id": "AIT_SYSTEMATIC_REVIEW_2023",
+    "topics": ["allergen immunotherapy", "ASIT", "AIT", "atopic dermatitis", "減感作療法"],
+    "title": "A systematic review of allergen immunotherapy, a successful therapy for canine atopic dermatitis and feline atopic skin syndrome",
+    "citation": "Mueller RS. J Am Vet Med Assoc. 2023;261(S1):S30-S35. doi:10.2460/javma.22.12.0576",
+    "url": "https://pubmed.ncbi.nlm.nih.gov/36940185/",
+    "evidence_type": "Systematic review",
+    "grade_hint": "A",
+    "key_points": [
+      "Allergen immunotherapy is the disease-modifying treatment directed at relevant allergens after clinical diagnosis and allergen identification for treatment selection."
+    ]
+  },
+  {
+    "id": "OCLACITINIB_REVIEW_2023",
+    "topics": ["oclacitinib", "atopic dermatitis", "allergic dermatitis", "アポキル"],
+    "title": "Oclacitinib 10 years later: lessons learned and directions for the future",
+    "citation": "Marsella R, et al. J Am Vet Med Assoc. 2023;261(S1):S36-S47. doi:10.2460/javma.22.12.0570",
+    "url": "https://pubmed.ncbi.nlm.nih.gov/36944222/",
+    "evidence_type": "Narrative evidence review",
+    "grade_hint": "C",
+    "key_points": [
+      "Reviews a decade of efficacy and safety experience with oclacitinib for canine allergic/atopic dermatitis.",
+      "Off-label extrapolation to unrelated immune-mediated diseases should not be treated as equivalent evidence."
+    ]
+  }
+]

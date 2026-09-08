@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0f172a" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Dog Derm AI" />
+  <title>Dog Derm AI — Veterinary Dermatology Decision Support</title>
+  <link rel="manifest" href="/manifest.webmanifest" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+  <div id="authOverlay" class="auth-overlay hidden">
+    <div class="auth-card">
+      <div class="brand auth-brand"><span class="brand-mark">D</span><div><b>DOG DERM AI</b><small>Protected clinical workspace</small></div></div>
+      <h2>アクセスキー</h2>
+      <p>この端末からDog Derm AIを使用するためのアクセスキーを入力してください。</p>
+      <input id="accessKey" type="password" autocomplete="current-password" placeholder="アクセスキー" />
+      <button id="loginBtn" class="primary">ログイン <span>→</span></button>
+      <p id="loginError" class="fineprint danger-text"></p>
+    </div>
+  </div>
+
+  <header class="topbar">
+    <div class="brand"><span class="brand-mark">D</span><div><b>DOG DERM AI</b><small>Veterinary Dermatology Decision Support</small></div></div>
+    <span id="modePill" class="pill">接続確認中</span>
+  </header>
+
+  <main class="shell">
+    <section id="installHint" class="install-hint hidden">
+      <b>iPhoneにアプリとして追加できます</b>
+      <span>Safariの共有ボタン →「ホーム画面に追加」→「追加」</span>
+      <button id="dismissInstall" aria-label="閉じる">×</button>
+    </section>
+
+    <section class="hero">
+      <div>
+        <div class="eyebrow">VETERINARIAN-ONLY MVP · v0.2 · iPHONE READY</div>
+        <h1>皮疹画像と病歴から、<br><em>鑑別 → 検査 → 治療根拠</em>まで。</h1>
+        <p>画像だけで断定せず、皮疹形態・分布・発症年齢・掻痒・予防歴・治療反応を統合して臨床推論を支援します。</p>
+      </div>
+      <div class="hero-card"><b>Evidence Guard</b><span>登録済み文献だけを引用</span><strong id="evidenceCount">—</strong><small>verified references</small></div>
+    </section>
+
+    <section class="panel input-panel">
+      <div class="section-title"><span>01</span><div><h2>皮疹画像</h2><p>近接・周囲を含む・分布が分かる写真の3種類を推奨</p></div></div>
+      <div class="photo-actions">
+        <label class="photo-action primary-photo">
+          <input id="cameraInput" type="file" accept="image/*" capture="environment" />
+          <span class="camera">＋</span><b>カメラで撮影</b><small>その場で1枚追加</small>
+        </label>
+        <label class="photo-action">
+          <input id="libraryInput" type="file" accept="image/*" multiple />
+          <span class="gallery">▧</span><b>写真から選択</b><small>複数選択可</small>
+        </label>
+      </div>
+      <p id="imageStatus" class="fineprint">最大6枚。iPhoneでは送信前にJPEG化・縮小して通信量を抑えます。</p>
+      <div id="previews" class="previews"></div>
+    </section>
+
+    <section class="panel">
+      <div class="section-title"><span>02</span><div><h2>患者情報・病歴</h2><p>診断精度に影響する情報を優先配置しています</p></div></div>
+      <div class="form-grid">
+        <label>犬種<input id="breed" placeholder="例：柴犬" /></label>
+        <label>現在の年齢<input id="age" placeholder="例：3歳" /></label>
+        <label>発症年齢<input id="onset_age" placeholder="例：2歳6か月" /></label>
+        <label>性別<select id="sex"><option value="">選択</option><option>未去勢雄</option><option>去勢雄</option><option>未避妊雌</option><option>避妊雌</option></select></label>
+        <label>いつから<input id="duration" placeholder="例：2週間前" /></label>
+        <label>経過<select id="course"><option value="">選択</option><option>初発・急性</option><option>慢性</option><option>再発性</option><option>徐々に悪化</option></select></label>
+        <label>痒み<select id="pruritus"><option value="">選択</option><option>なし</option><option>軽度</option><option>中等度</option><option>重度</option></select></label>
+        <label>pVAS（0–10）<input id="pvas" type="number" min="0" max="10" step="0.5" placeholder="例：6" /></label>
+        <label>痒みと皮疹の順序<select id="itch_order"><option value="">不明/選択</option><option>痒みが先</option><option>皮疹が先</option><option>ほぼ同時</option></select></label>
+        <label>季節性<select id="seasonality"><option value="">不明/選択</option><option>なし</option><option>あり</option><option>通年性</option></select></label>
+        <label class="span2">ノミ・マダニ予防<input id="prevention" placeholder="製品名、最終投与日、通年/季節性など" /></label>
+        <label class="span2">皮疹の分布<input id="distribution" placeholder="例：下腹部、腋窩、趾間、耳介内側" /></label>
+        <label class="span2">獣医師が認識した皮疹名（任意）<input id="vet_lesion" placeholder="例：丘疹、膿疱、表皮小環。未入力ならAIが画像から記載" /></label>
+        <label class="span2">過去の治療と反応<textarea id="treatment_history" placeholder="例：局所クロルヘキシジンで改善するが再発。アポキル歴など"></textarea></label>
+        <label>同居動物/人の皮疹<select id="contagion"><option value="">不明</option><option>なし</option><option>あり</option></select></label>
+        <label>消化器症状<select id="gi"><option value="">不明</option><option>なし</option><option>あり</option></select></label>
+        <label class="span2">食事歴<input id="diet" placeholder="主食、除去食歴、変更時期" /></label>
+        <label class="span2">全身症状・その他<textarea id="systemic" placeholder="発熱、元気食欲、疼痛、薬剤歴、基礎疾患など"></textarea></label>
+      </div>
+      <button id="analyzeBtn" class="primary">解析する <span>→</span></button>
+      <p class="fineprint">本MVPは獣医師向け臨床意思決定支援です。画像のみで確定診断は行いません。</p>
+    </section>
+
+    <section id="loading" class="panel loading hidden"><div class="spinner"></div><h2>臨床情報を統合しています</h2><p>皮疹形態 → 鑑別 → 追加検査 → Evidence Library照合</p></section>
+    <section id="results" class="results hidden"></section>
+  </main>
+  <footer>Dog Derm AI MVP v0.2 · Clinical decision support for veterinary professionals</footer>
+  <script src="/static/app.js"></script>
+</body>
+</html>
