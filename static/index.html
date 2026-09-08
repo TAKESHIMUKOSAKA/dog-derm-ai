@@ -11,6 +11,7 @@
   <link rel="manifest" href="/manifest.webmanifest" />
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
   <link rel="stylesheet" href="/static/styles.css" />
+  <link rel="stylesheet" href="/static/v03.css" />
 </head>
 <body>
   <div id="authOverlay" class="auth-overlay hidden">
@@ -38,11 +39,17 @@
 
     <section class="hero">
       <div>
-        <div class="eyebrow">VETERINARIAN-ONLY MVP · v0.3 · iPHONE READY</div>
+        <div class="eyebrow">VETERINARIAN-ONLY MVP · <span id="appVersion">v0.3.0</span> · iPHONE READY</div>
         <h1>皮疹画像と病歴から、<br><em>鑑別 → 検査 → 治療根拠</em>まで。</h1>
-        <p>画像だけで断定せず、皮疹形態・分布・発症年齢・掻痒・予防歴・治療反応を統合して臨床推論を支援します。</p>
+        <p>画像だけで断定せず、皮疹形態・分布・発症年齢・掻痒・予防歴・治療反応を統合。治療は用量・期間・再評価・モニタリングまで構造化して臨床推論を支援します。</p>
       </div>
-      <div class="hero-card"><b>Evidence Guard</b><span>登録済み文献だけを引用</span><strong id="evidenceCount">—</strong><small>verified references</small></div>
+      <div class="hero-card">
+        <b>Evidence & Dose Guard</b><span>文献と登録済み用量を分離して検証</span>
+        <div class="guard-stats">
+          <div class="guard-stat"><strong id="evidenceCount">—</strong><small>verified references</small></div>
+          <div class="guard-stat"><strong id="drugCount">—</strong><small>drug protocols</small></div>
+        </div>
+      </div>
     </section>
 
     <section class="panel input-panel">
@@ -84,10 +91,10 @@
         <label class="span2">全身症状・その他<textarea id="systemic" placeholder="発熱、元気食欲、疼痛、薬剤歴、基礎疾患など"></textarea></label>
       </div>
       <button id="analyzeBtn" class="primary">解析する <span>→</span></button>
-      <p class="fineprint">本MVPは獣医師向け臨床意思決定支援です。画像のみで確定診断は行いません。</p>
+      <p class="fineprint">本MVPは獣医師向け臨床意思決定支援です。画像のみで確定診断は行いません。具体的な数値用量は登録済みDrug Databaseと照合します。</p>
     </section>
 
-    <section id="loading" class="panel loading hidden"><div class="spinner"></div><h2>臨床情報を統合しています</h2><p>皮疹形態 → 鑑別 → 追加検査 → Evidence Library照合</p></section>
+    <section id="loading" class="panel loading hidden"><div class="spinner"></div><h2>臨床情報を統合しています</h2><p>皮疹形態 → 鑑別 → 追加検査 → Evidence / Drug Database照合</p></section>
     <section id="results" class="results hidden"></section>
   </main>
   <footer>Dog Derm AI MVP v0.3 · Clinical decision support for veterinary professionals</footer>
