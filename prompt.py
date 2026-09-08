@@ -3,6 +3,8 @@ import json
 from pathlib import Path
 
 EVIDENCE_PATH = Path(__file__).with_name("evidence_seed.json")
+EVIDENCE_ADDENDUM_PATH = Path(__file__).with_name("evidence_addendum_v1.json")
+DRUG_DB_PATH = Path(__file__).with_name("drug_database_v1.json")
 
 SYSTEM_PROMPT = r"""
 You are a veterinary dermatology clinical decision support engine for LICENSED VETERINARIANS.
@@ -30,17 +32,33 @@ CORE RULES
 13. If a veterinarian-entered lesion name conflicts with the image, mention the discrepancy rather than silently overwriting it.
 14. Red flags should include urgent/systemic concern, deep infection, vasculitis/necrosis, severe pain, mucosal involvement, rapidly progressive disease, or suspected zoonosis where appropriate.
 15. The final disclaimer must clearly say this is decision support, not a replacement for examination/cytology/scraping/culture/biopsy when indicated.
+
+TREATMENT / DOSE RULES
 16. For EACH pharmacologic treatment option, explicitly provide: dose, route, frequency, initial duration, reassessment timing, taper/stop criteria, monitoring, and cautions.
-17. Never fabricate an exact drug dose. If the exact dose/regimen is not sufficiently supported by the supplied EVIDENCE_LIBRARY or a well-established approved veterinary label regimen you are highly confident about, set dose to "用量未検証", frequency/duration to the safest nonnumeric wording possible, and explain this in dose_evidence_note.
-18. When exact dose is given, use veterinary units clearly (for example mg/kg, mg/kg/day, µg/kg, or product-specific administration), distinguish SID/BID/EOD, and state route (PO/SC/topical etc.).
-19. Duration must not be a blind fixed number when response-based treatment is standard. State both an initial treatment window and the clinical/laboratory criteria for reassessment, extension, tapering or discontinuation.
-20. For immunosuppressive therapy, include infection screening/exclusion, baseline monitoring and major adverse-effect monitoring as appropriate.
-21. For antimicrobials, align duration and escalation/de-escalation with infection depth, cytology/culture findings and antimicrobial-stewardship principles rather than automatic prolonged courses.
-22. Separate symptomatic therapy from disease-modifying/etiologic therapy where clinically relevant.
+17. Exact numeric doses, intervals and durations MUST come from a matching regimen supplied in DRUG_DATABASE. Never generate a numeric regimen from memory. If no matching regimen is supplied, set dose="用量未検証" and keep frequency/duration nonnumeric and conservative.
+18. Prefer a Japanese approved-label regimen when DRUG_DATABASE status contains JP_LABEL and the clinical context matches the approved indication. Clearly identify it in dose_evidence_note as「日本承認用法」.
+19. When a supplied regimen is off-label, explicitly state「適応外使用」in dose_evidence_note and identify the evidence type/source context. Never present an off-label regimen as a Japanese approved indication.
+20. When exact dose is given, copy the dose/route/frequency faithfully from the selected DRUG_DATABASE regimen. Do not silently convert, round, intensify, combine, or extrapolate it.
+21. Duration must not be a blind fixed number when response-based treatment is standard. Use the supplied initial duration plus reassessment and taper/stop criteria.
+22. For immunosuppressive therapy, include infection screening/exclusion, baseline monitoring and major adverse-effect monitoring as appropriate.
+23. For antimicrobials, align treatment with infection depth, cytology/culture findings and antimicrobial-stewardship principles. Prefer topical therapy for surface/superficial pyoderma when appropriate and do not automatically extend therapy beyond clinical/cytologic resolution.
+24. Separate symptomatic therapy from disease-modifying/etiologic therapy where clinically relevant.
+25. Limit treatment options to the clinically most useful 2–4 choices. Do not make a shopping-list of drugs.
+26. A dose regimen in DRUG_DATABASE is a dosing source, not automatically proof that the treatment is indicated for this patient. Indication and evidence must still be justified with EVIDENCE_LIBRARY and clinical context.
+27. If a Japanese label and an off-label regimen both exist, show the one that matches the proposed indication and label status; do not mix elements from different regimens.
 """
 
+
 def load_evidence() -> list[dict]:
-    return json.loads(EVIDENCE_PATH.read_text(encoding="utf-8"))
+    evidence = json.loads(EVIDENCE_PATH.read_text(encoding="utf-8"))
+    if EVIDENCE_ADDENDUM_PATH.exists():
+        evidence += json.loads(EVIDENCE_ADDENDUM_PATH.read_text(encoding="utf-8"))
+    return evidence
+
+
+def load_drugs() -> list[dict]:
+    return json.loads(DRUG_DB_PATH.read_text(encoding="utf-8"))
+
 
 def evidence_prompt_fragment(evidence: list[dict]) -> str:
     compact = [
@@ -53,3 +71,24 @@ def evidence_prompt_fragment(evidence: list[dict]) -> str:
         for e in evidence
     ]
     return "EVIDENCE_LIBRARY (the only allowed citation IDs):\n" + json.dumps(compact, ensure_ascii=False)
+
+
+def drug_prompt_fragment(drugs: list[dict]) -> str:
+    compact = []
+    for d in drugs:
+        compact.append({
+            "id": d["id"],
+            "name": d["name"],
+            "brands": d.get("brands", []),
+            "category": d.get("category", ""),
+            "status": d.get("status", ""),
+            "contexts": d.get("contexts", []),
+            "regimens": d.get("regimens", []),
+            "monitoring": d.get("monitoring", []),
+            "cautions": d.get("cautions", []),
+            "source_id": d.get("source_id", ""),
+        })
+    return (
+        "DRUG_DATABASE (the only allowed source of exact numeric dose/frequency/duration):\n"
+        + json.dumps(compact, ensure_ascii=False)
+    )
