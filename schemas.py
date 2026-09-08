@@ -31,10 +31,18 @@ class TreatmentOption(BaseModel):
     indication: str
     therapy: str
     protocol: str
+    dose: str = ""
+    route: str = ""
+    frequency: str = ""
+    initial_duration: str = ""
+    reassessment_timing: str = ""
+    taper_or_stop: str = ""
+    monitoring: list[str] = []
     evidence_grade: EvidenceGrade
     recommendation_strength: RecommendationStrength
     evidence_ids: list[str]
     cautions: list[str]
+    dose_evidence_note: str = ""
 
 class EvidenceReference(BaseModel):
     id: str
