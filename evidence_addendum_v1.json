@@ -1,0 +1,84 @@
+[
+  {
+    "id": "WAVD_MALASSEZIA_2020",
+    "topics": ["Malassezia dermatitis", "マラセチア皮膚炎", "miconazole", "chlorhexidine", "itraconazole", "ketoconazole", "fluconazole", "terbinafine"],
+    "title": "Biology, diagnosis and treatment of Malassezia dermatitis in dogs and cats: Clinical Consensus Guidelines of the World Association for Veterinary Dermatology",
+    "citation": "Bond R, et al. Vet Dermatol. 2020;31(1):28-74. doi:10.1111/vde.12809. PMID:31957204",
+    "url": "https://pubmed.ncbi.nlm.nih.gov/31957204/",
+    "evidence_type": "WAVD clinical consensus guideline with literature review",
+    "grade_hint": "A",
+    "key_points": [
+      "Topical therapy is important for Malassezia dermatitis; 2% miconazole plus 2% chlorhexidine shampoo twice weekly has strong supportive evidence.",
+      "Itraconazole and ketoconazole have evidence for systemic treatment in dogs when topical therapy is insufficient or impractical.",
+      "Clinical improvement should be interpreted together with cytology and management of underlying disease."
+    ]
+  },
+  {
+    "id": "CLE_REVIEW_2018",
+    "topics": ["cutaneous lupus erythematosus", "discoid lupus", "DLE", "CLE", "皮膚エリテマトーデス", "tacrolimus", "ciclosporin", "glucocorticoid"],
+    "title": "Cutaneous lupus erythematosus in dogs: a comprehensive review",
+    "citation": "Olivry T, Linder KE, Banovic F. BMC Vet Res. 2018;14:132. doi:10.1186/s12917-018-1446-8. PMID:29669547",
+    "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5907183/",
+    "evidence_type": "Comprehensive disease review of published canine CLE cases/series",
+    "grade_hint": "C",
+    "key_points": [
+      "Canine CLE comprises multiple subtypes with different treatment responses; subtype and extent matter when selecting therapy.",
+      "Published regimens include topical tacrolimus for localized disease and systemic glucocorticoids/ciclosporin for selected generalized or severe forms.",
+      "Evidence is largely case series and small clinical studies rather than large randomized trials."
+    ]
+  },
+  {
+    "id": "MMF_DERM_2017",
+    "topics": ["mycophenolate mofetil", "MMF", "immune-mediated skin disease", "免疫介在性皮膚疾患", "lupus", "pemphigus"],
+    "title": "Use of mycophenolate mofetil to treat immune-mediated skin disease in 14 dogs - a retrospective evaluation",
+    "citation": "Ackermann AL, May ER, Frank LA. Vet Dermatol. 2017;28(2):195-e44. doi:10.1111/vde.12400. PMID:27943548",
+    "url": "https://pubmed.ncbi.nlm.nih.gov/27943548/",
+    "evidence_type": "Retrospective case series (14 dogs)",
+    "grade_hint": "D",
+    "key_points": [
+      "Fourteen dogs received MMF with glucocorticoids; mean MMF dose was 14.7 mg/kg twice daily.",
+      "Ten of 14 dogs had a positive response, including eight complete remissions.",
+      "This is retrospective evidence and does not establish a universally optimal dose."
+    ]
+  },
+  {
+    "id": "PANNICULITIS_RETRO_2010",
+    "topics": ["sterile nodular panniculitis", "panniculitis", "脂肪織炎", "glucocorticoid", "ciclosporin", "azathioprine"],
+    "title": "Canine sterile nodular panniculitis: a retrospective study of 14 cases",
+    "citation": "O'Kell AL, et al. J Vet Intern Med. 2010;24(2):278-284. doi:10.1111/j.1939-1676.2009.0449.x. PMID:20051003",
+    "url": "https://pubmed.ncbi.nlm.nih.gov/20051003/",
+    "evidence_type": "Retrospective case series (14 dogs)",
+    "grade_hint": "D",
+    "key_points": [
+      "Sterile nodular panniculitis may be a marker of concurrent systemic disease; infectious causes and concurrent disease should be investigated.",
+      "Dogs treated with immunosuppressive corticosteroids generally responded.",
+      "Prognosis and treatment decisions depend on the underlying disease process."
+    ]
+  },
+  {
+    "id": "HCQ_GDLE_2012",
+    "topics": ["hydroxychloroquine", "generalized discoid lupus", "GDLE", "皮膚エリテマトーデス"],
+    "title": "Successful treatment of a novel generalized variant of canine discoid lupus erythematosus with oral hydroxychloroquine",
+    "citation": "Oberkirchner U, Linder KE, Olivry T. Vet Dermatol. 2012;23(1):65-70,e15-16. doi:10.1111/j.1365-3164.2011.00994.x. PMID:21718370",
+    "url": "https://pubmed.ncbi.nlm.nih.gov/21718370/",
+    "evidence_type": "Single canine case report",
+    "grade_hint": "D",
+    "key_points": [
+      "A dog with generalized discoid lupus achieved long-term control with hydroxychloroquine 5 mg/kg orally once daily, with topical therapy during flares.",
+      "Relapse occurred when dosing frequency was reduced, underscoring that this is individual case evidence rather than a standard regimen."
+    ]
+  },
+  {
+    "id": "TET_NIAC_1992",
+    "topics": ["tetracycline", "niacinamide", "nicotinamide", "discoid lupus", "DLE", "autoimmune skin disease"],
+    "title": "Use of tetracycline and niacinamide for treatment of autoimmune skin disease in 31 dogs",
+    "citation": "White SD, Rosychuk RA, Reinke SI, Paradis M. J Am Vet Med Assoc. 1992;200(10):1497-1500. PMID:1535346",
+    "url": "https://pubmed.ncbi.nlm.nih.gov/1535346/",
+    "evidence_type": "Clinical case series (31 dogs)",
+    "grade_hint": "D",
+    "key_points": [
+      "The combination was evaluated in 31 dogs with autoimmune skin disease; 70% of dogs with discoid lupus had good or excellent responses.",
+      "Modern antimicrobial stewardship should be considered before using an antibiotic primarily for immunomodulation."
+    ]
+  }
+]
