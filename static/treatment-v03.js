@@ -21,7 +21,7 @@ shareText = function(d){
     `用量根拠: ${x.dose_evidence_note||'—'}`,
     `Evidence: ${x.evidence_grade||'UNVERIFIED'} / ${x.label_status||'UNVERIFIED'}`
   ].join('\n')).join('\n\n');
-  return `Dog Derm AI\n\n${d.problem_representation||''}\n\n鑑別診断\n${diffs}\n\n推奨検査\n${tests}\n\n具体的治療プロトコル\n${tx}\n\n${d.disclaimer||''}`;
+  return `Dog Derm AI\n\n症例要約\n${d.problem_representation||''}\n\n鑑別診断\n${diffs}\n\n推奨検査\n${tests}\n\n具体的治療プロトコル\n${tx}\n\n${d.disclaimer||''}`;
 };
 
 renderResults = function(d){
@@ -54,7 +54,7 @@ renderResults = function(d){
   const refs=(d.evidence_references||[]).map(x=>`<div class="evidence"><a href="${esc(x.url)}" target="_blank" rel="noreferrer">${esc(x.id)} · ${esc(x.title)}</a><p>${esc(x.citation)}</p><p>${esc(x.evidence_type)}</p></div>`).join('') || '<p class="disclaimer">今回の治療提案に紐づく検証済み文献はありません。</p>';
   const reds=(d.red_flags||[]).length?`<div class="alert danger"><b>Red flags</b>${list(d.red_flags)}</div>`:'<div class="alert"><b>Red flags</b> · 今回の入力から明確な緊急フラグは抽出されませんでした。</div>';
   $('results').innerHTML=`
-    <div class="result-head"><div class="result-actions"><button id="shareBtn" class="secondary">結果を共有</button></div><div class="kicker">CLINICAL REPRESENTATION</div><h2>${esc(d.problem_representation)}</h2><p>${esc(d.lesion_description)}</p><span class="quality">IMAGE ${esc(d.image_quality)} · ${esc(d.image_quality_comment)}</span></div>
+    <div class="result-head"><div class="result-actions"><button id="shareBtn" class="secondary">結果を共有</button></div><div class="kicker">症例要約</div><div class="summary-note">病歴と皮疹所見のうち、鑑別に重要な情報だけを短くまとめています</div><h2>${esc(d.problem_representation)}</h2><p>${esc(d.lesion_description)}</p><span class="quality">IMAGE ${esc(d.image_quality)} · ${esc(d.image_quality_comment)}</span></div>
     <div class="cards">
       <div class="card"><h3>AI皮疹認識</h3><div class="morphs">${morph||'<span class="tag">評価不能</span>'}</div></div>
       <div class="card"><h3>追加で確認したい問診</h3>${list(d.additional_questions)}</div>
