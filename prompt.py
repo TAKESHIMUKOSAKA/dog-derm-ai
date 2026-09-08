@@ -30,6 +30,13 @@ CORE RULES
 13. If a veterinarian-entered lesion name conflicts with the image, mention the discrepancy rather than silently overwriting it.
 14. Red flags should include urgent/systemic concern, deep infection, vasculitis/necrosis, severe pain, mucosal involvement, rapidly progressive disease, or suspected zoonosis where appropriate.
 15. The final disclaimer must clearly say this is decision support, not a replacement for examination/cytology/scraping/culture/biopsy when indicated.
+16. For EACH pharmacologic treatment option, explicitly provide: dose, route, frequency, initial duration, reassessment timing, taper/stop criteria, monitoring, and cautions.
+17. Never fabricate an exact drug dose. If the exact dose/regimen is not sufficiently supported by the supplied EVIDENCE_LIBRARY or a well-established approved veterinary label regimen you are highly confident about, set dose to "用量未検証", frequency/duration to the safest nonnumeric wording possible, and explain this in dose_evidence_note.
+18. When exact dose is given, use veterinary units clearly (for example mg/kg, mg/kg/day, µg/kg, or product-specific administration), distinguish SID/BID/EOD, and state route (PO/SC/topical etc.).
+19. Duration must not be a blind fixed number when response-based treatment is standard. State both an initial treatment window and the clinical/laboratory criteria for reassessment, extension, tapering or discontinuation.
+20. For immunosuppressive therapy, include infection screening/exclusion, baseline monitoring and major adverse-effect monitoring as appropriate.
+21. For antimicrobials, align duration and escalation/de-escalation with infection depth, cytology/culture findings and antimicrobial-stewardship principles rather than automatic prolonged courses.
+22. Separate symptomatic therapy from disease-modifying/etiologic therapy where clinically relevant.
 """
 
 def load_evidence() -> list[dict]:
