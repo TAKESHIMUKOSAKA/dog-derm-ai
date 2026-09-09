@@ -54,6 +54,29 @@ class EvidenceReference(BaseModel):
     url: str
     evidence_type: str
 
+class ChartExtraction(BaseModel):
+    breed: str = ""
+    age: str = ""
+    onset_age: str = ""
+    sex: Literal["", "未去勢雄", "去勢雄", "未避妊雌", "避妊雌"] = ""
+    duration: str = ""
+    course: Literal["", "初発・急性", "慢性", "再発性", "徐々に悪化"] = ""
+    pruritus: Literal["", "なし", "軽度", "中等度", "重度"] = ""
+    pvas: str = ""
+    itch_order: Literal["", "痒みが先", "皮疹が先", "ほぼ同時"] = ""
+    seasonality: Literal["", "なし", "あり", "通年性"] = ""
+    prevention: str = ""
+    distribution: str = ""
+    vet_lesion: str = ""
+    treatment_history: str = ""
+    contagion: Literal["", "なし", "あり"] = ""
+    gi: Literal["", "なし", "あり"] = ""
+    diet: str = ""
+    systemic: str = ""
+    summary: str = ""
+    uncertain_fields: list[str] = []
+    source_notes: list[str] = []
+
 class DermAssessment(BaseModel):
     image_quality: Literal["ADEQUATE", "LIMITED", "NOT_ASSESSABLE"]
     image_quality_comment: str
