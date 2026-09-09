@@ -1,5 +1,6 @@
 const $ = id => document.getElementById(id);
 let files = [];
+let chartFiles = [];
 let appKey = sessionStorage.getItem('dogDermAppKey') || '';
 let isProtected = false;
 let lastResult = null;
@@ -10,6 +11,8 @@ async function health(){
   const r = await fetch('/api/health', {cache:'no-store'}); const h = await r.json();
   $('modePill').textContent = h.mode === 'openai' ? `AI接続 · ${h.model}` : 'DEMO MODE · APIキー未設定';
   $('evidenceCount').textContent = h.evidence_count;
+  if($('drugCount')) $('drugCount').textContent = h.drug_count;
+  if($('appVersion')) $('appVersion').textContent = `v${h.version}`;
   isProtected = !!h.protected;
   if(isProtected) await ensureAuth();
 }
@@ -67,7 +70,7 @@ async function normalizeImage(file){
     const ctx=canvas.getContext('2d',{alpha:false}); ctx.drawImage(img,0,0,w,h);
     const blob=await new Promise(resolve=>canvas.toBlob(resolve,'image/jpeg',0.88));
     if(!blob) throw new Error('JPEG変換に失敗しました');
-    const base=(file.name||'lesion').replace(/\.[^.]+$/,'');
+    const base=(file.name||'image').replace(/\.[^.]+$/,'');
     return new File([blob],`${base}.jpg`,{type:'image/jpeg',lastModified:Date.now()});
   }catch(e){
     const supported=['image/jpeg','image/png','image/webp','image/gif'];
@@ -102,12 +105,86 @@ function renderPreviews(){
   });
 }
 
+async function addChartImages(selected){
+  const incoming=Array.from(selected).slice(0,4);
+  if(!incoming.length) return;
+  $('chartStatus').textContent='カルテ画像を準備しています…';
+  try{
+    chartFiles=[];
+    for(const f of incoming) chartFiles.push(await normalizeImage(f));
+    renderChartPreviews();
+    await extractChart();
+  }catch(e){
+    $('chartStatus').textContent='カルテ読取に失敗しました。手入力でも解析できます。';
+    alert(e.message);
+  }
+}
+
+['chartCameraInput','chartLibraryInput'].forEach(id=>$(id).addEventListener('change', async e=>{
+  await addChartImages(e.target.files); e.target.value='';
+}));
+
+function renderChartPreviews(){
+  $('chartPreviews').innerHTML='';
+  chartFiles.forEach(f=>{
+    const d=document.createElement('div'); d.className='preview chart-preview';
+    const img=document.createElement('img'); img.src=URL.createObjectURL(f);
+    d.append(img); $('chartPreviews').append(d);
+  });
+}
+
+const chartFieldMap={
+  breed:'breed', age:'age', onset_age:'onset_age', sex:'sex', duration:'duration', course:'course', pruritus:'pruritus', pvas:'pvas',
+  itch_order:'itch_order', seasonality:'seasonality', prevention:'prevention', distribution:'distribution', vet_lesion:'vet_lesion',
+  treatment_history:'treatment_history', contagion:'contagion', gi:'gi', diet:'diet', systemic:'systemic'
+};
+const fieldLabels={breed:'犬種',age:'年齢',onset_age:'発症年齢',sex:'性別',duration:'発症時期',course:'経過',pruritus:'痒み',pvas:'pVAS',itch_order:'痒みと皮疹の順序',seasonality:'季節性',prevention:'ノミ・マダニ予防',distribution:'分布',vet_lesion:'皮疹名',treatment_history:'治療歴',contagion:'同居動物/人の皮疹',gi:'消化器症状',diet:'食事歴',systemic:'全身症状・その他'};
+
+function applyChartExtraction(data){
+  let count=0;
+  Object.entries(chartFieldMap).forEach(([key,id])=>{
+    const value=(data[key]??'').toString().trim();
+    if(!value) return;
+    const el=$(id);
+    if(el.tagName==='SELECT'){
+      const ok=Array.from(el.options).some(o=>o.value===value || o.textContent===value);
+      if(!ok) return;
+    }
+    el.value=value; el.classList.add('auto-filled'); count++;
+  });
+  const uncertain=data.uncertain_fields||[];
+  $('chartStatus').textContent=`カルテから ${count}項目を自動入力しました${uncertain.length?` · 要確認 ${uncertain.length}項目`:''}`;
+  const parts=[];
+  if(data.summary) parts.push(data.summary);
+  if(uncertain.length) parts.push(`不明・要確認：${uncertain.map(x=>fieldLabels[x]||x).join('、')}`);
+  if((data.source_notes||[]).length) parts.push(`読取メモ：${data.source_notes.join(' / ')}`);
+  $('chartSummary').textContent=parts.join('\n');
+  $('chartSummary').classList.toggle('hidden',parts.length===0);
+}
+
+async function extractChart(){
+  if(!chartFiles.length) return;
+  if(isProtected && !(await ensureAuth())) return;
+  $('chartReading').classList.remove('hidden');
+  $('chartStatus').textContent='カルテをAIで読み取っています…';
+  const fd=new FormData(); chartFiles.forEach(f=>fd.append('chart_images',f,f.name));
+  try{
+    const r=await fetch('/api/extract-chart',{method:'POST',body:fd,headers:authHeaders()});
+    const data=await r.json();
+    if(r.status===401){appKey='';sessionStorage.removeItem('dogDermAppKey');$('authOverlay').classList.remove('hidden');throw new Error('アクセスキーを再入力してください。');}
+    if(!r.ok) throw new Error(data.detail||'カルテ読取エラー');
+    applyChartExtraction(data);
+  }finally{
+    $('chartReading').classList.add('hidden');
+  }
+}
+
 function val(id){return $(id).value.trim()}
 function patient(){return {
   species:'dog', breed:val('breed'), age:val('age'), onset_age:val('onset_age'), sex:val('sex'), duration:val('duration'), course:val('course'),
   pruritus:val('pruritus'), pvas:val('pvas'), itch_vs_lesion_order:val('itch_order'), seasonality:val('seasonality'), ectoparasite_prevention:val('prevention'),
   distribution:val('distribution'), vet_lesion:val('vet_lesion'), treatment_history:val('treatment_history'), contagion:val('contagion'), gastrointestinal_signs:val('gi'),
-  diet_history:val('diet'), systemic_or_other:val('systemic')
+  diet_history:val('diet'), systemic_or_other:val('systemic'), clinician_note:val('quick_note')
 }}
 
 $('analyzeBtn').addEventListener('click', async ()=>{
@@ -146,7 +223,7 @@ function renderResults(d){
   const refs=(d.evidence_references||[]).map(x=>`<div class="evidence"><a href="${esc(x.url)}" target="_blank" rel="noreferrer">${esc(x.id)} · ${esc(x.title)}</a><p>${esc(x.citation)}</p><p>${esc(x.evidence_type)}</p></div>`).join('') || '<p class="disclaimer">今回の治療提案に紐づく検証済み文献はありません。</p>';
   const reds=(d.red_flags||[]).length?`<div class="alert danger"><b>Red flags</b>${list(d.red_flags)}</div>`:'<div class="alert"><b>Red flags</b> · 今回の入力から明確な緊急フラグは抽出されませんでした。</div>';
   $('results').innerHTML=`
-    <div class="result-head"><div class="result-actions"><button id="shareBtn" class="secondary">結果を共有</button></div><div class="kicker">CLINICAL REPRESENTATION</div><h2>${esc(d.problem_representation)}</h2><p>${esc(d.lesion_description)}</p><span class="quality">IMAGE ${esc(d.image_quality)} · ${esc(d.image_quality_comment)}</span></div>
+    <div class="result-head"><div class="result-actions"><button id="shareBtn" class="secondary">結果を共有</button></div><div class="kicker">症例要約</div><h2>${esc(d.problem_representation)}</h2><p>${esc(d.lesion_description)}</p><span class="quality">IMAGE ${esc(d.image_quality)} · ${esc(d.image_quality_comment)}</span></div>
     <div class="cards">
       <div class="card"><h3>AI皮疹認識</h3><div class="morphs">${morph||'<span class="tag">評価不能</span>'}</div></div>
       <div class="card"><h3>追加で確認したい問診</h3>${list(d.additional_questions)}</div>
