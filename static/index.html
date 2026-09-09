@@ -11,8 +11,10 @@
   <link rel="manifest" href="/manifest.webmanifest" />
   <link rel="icon" type="image/jpeg" href="/static/icons/dog-derm-ai-192.jpg" />
   <link rel="apple-touch-icon" href="/static/icons/dog-derm-ai-192.jpg" />
-  <link rel="stylesheet" href="/static/styles.css?v=040" />
-  <link rel="stylesheet" href="/static/v03.css?v=040" />
+  <link rel="stylesheet" href="/static/styles.css?v=050" />
+  <link rel="stylesheet" href="/static/v03.css?v=050" />
+  <link rel="stylesheet" href="/static/v04.css?v=050" />
+  <link rel="stylesheet" href="/static/v05.css?v=050" />
 </head>
 <body>
   <div id="authOverlay" class="auth-overlay hidden">
@@ -40,9 +42,9 @@
 
     <section class="hero">
       <div>
-        <div class="eyebrow">VETERINARIAN-ONLY · <span id="appVersion">v0.4.0</span> · CHART AUTO-FILL</div>
+        <div class="eyebrow">VETERINARIAN-ONLY · <span id="appVersion">v0.5.0</span> · LONGITUDINAL CASES</div>
         <h1>写真とカルテから、<br><em>鑑別 → 検査 → 治療根拠</em>まで。</h1>
-        <p>皮疹写真に加え、カルテのスクリーンショットから患者情報・病歴を自動抽出。不足情報だけ確認し、入力作業を最小限にします。</p>
+        <p>カルテの自動入力に加え、症例を保存して再診時の検査結果・治療反応・新しい所見を追加。各時点のAI鑑別を残しながら再解析できます。</p>
       </div>
       <div class="hero-card">
         <b>Evidence & Dose Guard</b><span>文献と登録済み用量を分離して検証</span>
@@ -51,6 +53,44 @@
           <div class="guard-stat"><strong id="drugCount">—</strong><small>drug protocols</small></div>
         </div>
       </div>
+    </section>
+
+    <section class="panel case-panel">
+      <div class="section-title"><span>00</span><div><h2>症例管理</h2><p>一度解析した症例を保存し、追加検査・経過を加えて継続的に再解析できます</p></div></div>
+      <div class="case-toolbar">
+        <div id="activeCaseSummary" class="active-case-summary"><b>新しい症例</b><span>解析するとこの端末に自動保存されます</span></div>
+        <button id="saveCaseBtn" class="case-btn primary-case">症例を保存</button>
+        <button id="showCasesBtn" class="case-btn">保存症例</button>
+        <button id="newCaseBtn" class="case-btn">新しい症例</button>
+      </div>
+      <div id="caseNotice" class="case-notice"></div>
+
+      <div id="savedCasesPanel" class="saved-cases-panel hidden">
+        <div class="saved-cases-head"><b>保存症例</b><span id="savedCaseCount">0症例</span></div>
+        <div id="savedCasesList" class="saved-cases-list"></div>
+      </div>
+
+      <div id="activeCaseTools" class="hidden">
+        <div class="case-meta">
+          <div class="case-meta-grid">
+            <label>症例名 / 院内ID（任意）<input id="caseTitle" placeholder="例：柴犬 3歳 / D-2026-001" /></label>
+            <label>最終診断（確定後に任意）<input id="finalDiagnosis" placeholder="例：皮膚エリテマトーデス" /></label>
+            <button id="saveCaseMetaBtn" class="case-btn">保存</button>
+          </div>
+        </div>
+        <div class="followup-box">
+          <h3>追加の検査結果・経過</h3>
+          <p>再診時はここに新しい情報だけ入力してください。過去の追加情報は症例履歴として自動的に次回解析へ引き継がれます。</p>
+          <label>今回の追加情報
+            <textarea id="followup_note" placeholder="例：細胞診で球菌多数・好中球貪食像あり。セファレキシン14日で丘疹は改善したが結節は残存。病理検査を実施。"></textarea>
+          </label>
+        </div>
+        <div class="timeline-wrap">
+          <h3>症例タイムライン</h3>
+          <div id="caseTimeline" class="case-timeline"></div>
+        </div>
+      </div>
+      <div class="local-only">試作版では症例データと画像はこの端末のブラウザ内に保存します。飼い主の氏名・住所・電話番号などは保存しない運用を推奨します。別端末との同期は今後のクラウド保存版で対応できます。</div>
     </section>
 
     <section class="panel input-panel">
@@ -121,8 +161,9 @@
     <section id="loading" class="panel loading hidden"><div class="spinner"></div><h2>臨床情報を統合しています</h2><p>皮疹形態 → 病歴 → 鑑別 → 追加検査 → Evidence / Drug Database照合</p></section>
     <section id="results" class="results hidden"></section>
   </main>
-  <footer>Dog Derm AI v0.4 · Clinical decision support for veterinary professionals</footer>
-  <script src="/static/app.js?v=040"></script>
-  <script src="/static/treatment-v03.js?v=040"></script>
+  <footer>Dog Derm AI v0.5 · Clinical decision support for veterinary professionals</footer>
+  <script src="/static/app.js?v=050"></script>
+  <script src="/static/treatment-v03.js?v=050"></script>
+  <script src="/static/case-v05.js?v=050"></script>
 </body>
 </html>
