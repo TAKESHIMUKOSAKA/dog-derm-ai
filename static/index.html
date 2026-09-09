@@ -11,8 +11,8 @@
   <link rel="manifest" href="/manifest.webmanifest" />
   <link rel="icon" type="image/jpeg" href="/static/icons/dog-derm-ai-192.jpg" />
   <link rel="apple-touch-icon" href="/static/icons/dog-derm-ai-192.jpg" />
-  <link rel="stylesheet" href="/static/styles.css" />
-  <link rel="stylesheet" href="/static/v03.css" />
+  <link rel="stylesheet" href="/static/styles.css?v=040" />
+  <link rel="stylesheet" href="/static/v03.css?v=040" />
 </head>
 <body>
   <div id="authOverlay" class="auth-overlay hidden">
@@ -40,9 +40,9 @@
 
     <section class="hero">
       <div>
-        <div class="eyebrow">VETERINARIAN-ONLY MVP · <span id="appVersion">v0.3.0</span> · iPHONE READY</div>
-        <h1>皮疹画像と病歴から、<br><em>鑑別 → 検査 → 治療根拠</em>まで。</h1>
-        <p>画像だけで断定せず、皮疹形態・分布・発症年齢・掻痒・予防歴・治療反応を統合。治療は用量・期間・再評価・モニタリングまで構造化して臨床推論を支援します。</p>
+        <div class="eyebrow">VETERINARIAN-ONLY · <span id="appVersion">v0.4.0</span> · CHART AUTO-FILL</div>
+        <h1>写真とカルテから、<br><em>鑑別 → 検査 → 治療根拠</em>まで。</h1>
+        <p>皮疹写真に加え、カルテのスクリーンショットから患者情報・病歴を自動抽出。不足情報だけ確認し、入力作業を最小限にします。</p>
       </div>
       <div class="hero-card">
         <b>Evidence & Dose Guard</b><span>文献と登録済み用量を分離して検証</span>
@@ -69,37 +69,60 @@
       <div id="previews" class="previews"></div>
     </section>
 
-    <section class="panel">
-      <div class="section-title"><span>02</span><div><h2>患者情報・病歴</h2><p>診断精度に影響する情報を優先配置しています</p></div></div>
-      <div class="form-grid">
-        <label>犬種<input id="breed" placeholder="例：柴犬" /></label>
-        <label>現在の年齢<input id="age" placeholder="例：3歳" /></label>
-        <label>発症年齢<input id="onset_age" placeholder="例：2歳6か月" /></label>
-        <label>性別<select id="sex"><option value="">選択</option><option>未去勢雄</option><option>去勢雄</option><option>未避妊雌</option><option>避妊雌</option></select></label>
-        <label>いつから<input id="duration" placeholder="例：2週間前" /></label>
-        <label>経過<select id="course"><option value="">選択</option><option>初発・急性</option><option>慢性</option><option>再発性</option><option>徐々に悪化</option></select></label>
-        <label>痒み<select id="pruritus"><option value="">選択</option><option>なし</option><option>軽度</option><option>中等度</option><option>重度</option></select></label>
-        <label>pVAS（0–10）<input id="pvas" type="number" min="0" max="10" step="0.5" placeholder="例：6" /></label>
-        <label>痒みと皮疹の順序<select id="itch_order"><option value="">不明/選択</option><option>痒みが先</option><option>皮疹が先</option><option>ほぼ同時</option></select></label>
-        <label>季節性<select id="seasonality"><option value="">不明/選択</option><option>なし</option><option>あり</option><option>通年性</option></select></label>
-        <label class="span2">ノミ・マダニ予防<input id="prevention" placeholder="製品名、最終投与日、通年/季節性など" /></label>
-        <label class="span2">皮疹の分布<input id="distribution" placeholder="例：下腹部、腋窩、趾間、耳介内側" /></label>
-        <label class="span2">獣医師が認識した皮疹名（任意）<input id="vet_lesion" placeholder="例：丘疹、膿疱、表皮小環。未入力ならAIが画像から記載" /></label>
-        <label class="span2">過去の治療と反応<textarea id="treatment_history" placeholder="例：局所クロルヘキシジンで改善するが再発。アポキル歴など"></textarea></label>
-        <label>同居動物/人の皮疹<select id="contagion"><option value="">不明</option><option>なし</option><option>あり</option></select></label>
-        <label>消化器症状<select id="gi"><option value="">不明</option><option>なし</option><option>あり</option></select></label>
-        <label class="span2">食事歴<input id="diet" placeholder="主食、除去食歴、変更時期" /></label>
-        <label class="span2">全身症状・その他<textarea id="systemic" placeholder="発熱、元気食欲、疼痛、薬剤歴、基礎疾患など"></textarea></label>
+    <section class="panel chart-panel">
+      <div class="section-title"><span>02</span><div><h2>カルテから自動入力</h2><p>カルテ画面を撮影・スクショすると患者情報と病歴をAIが入力します</p></div></div>
+      <div class="chart-actions">
+        <label class="chart-action">
+          <input id="chartCameraInput" type="file" accept="image/*" capture="environment" />
+          <span class="chart-icon">▣</span><b>カルテを撮影</b><small>紙カルテ・別端末の画面</small>
+        </label>
+        <label class="chart-action chart-action-primary">
+          <input id="chartLibraryInput" type="file" accept="image/*" multiple />
+          <span class="chart-icon">▧</span><b>スクショを選択</b><small>最大4枚・選ぶと自動読取</small>
+        </label>
       </div>
+      <div id="chartReading" class="chart-reading hidden"><div class="mini-spinner"></div><span>カルテを読み取っています…</span></div>
+      <p id="chartStatus" class="chart-status">未追加。手入力だけでも解析できます。</p>
+      <div id="chartPreviews" class="previews chart-previews"></div>
+      <div id="chartSummary" class="chart-summary hidden"></div>
+
+      <label class="quick-note">今回の補足（任意）
+        <textarea id="quick_note" placeholder="例：今回は背部の結節が主訴。昨日から急に増えた。"></textarea>
+      </label>
+
+      <details id="patientDetails" class="patient-details">
+        <summary><span>患者情報を確認・修正</span><small>カルテから自動入力された内容を確認できます</small></summary>
+        <div class="form-grid compact-form">
+          <label>犬種<input id="breed" placeholder="例：柴犬" /></label>
+          <label>現在の年齢<input id="age" placeholder="例：3歳" /></label>
+          <label>発症年齢<input id="onset_age" placeholder="例：2歳6か月" /></label>
+          <label>性別<select id="sex"><option value="">選択</option><option>未去勢雄</option><option>去勢雄</option><option>未避妊雌</option><option>避妊雌</option></select></label>
+          <label>いつから<input id="duration" placeholder="例：2週間前" /></label>
+          <label>経過<select id="course"><option value="">選択</option><option>初発・急性</option><option>慢性</option><option>再発性</option><option>徐々に悪化</option></select></label>
+          <label>痒み<select id="pruritus"><option value="">選択</option><option>なし</option><option>軽度</option><option>中等度</option><option>重度</option></select></label>
+          <label>pVAS（0–10）<input id="pvas" type="number" min="0" max="10" step="0.5" placeholder="例：6" /></label>
+          <label>痒みと皮疹の順序<select id="itch_order"><option value="">不明/選択</option><option>痒みが先</option><option>皮疹が先</option><option>ほぼ同時</option></select></label>
+          <label>季節性<select id="seasonality"><option value="">不明/選択</option><option>なし</option><option>あり</option><option>通年性</option></select></label>
+          <label class="span2">ノミ・マダニ予防<input id="prevention" placeholder="製品名、最終投与日、通年/季節性など" /></label>
+          <label class="span2">皮疹の分布<input id="distribution" placeholder="例：下腹部、腋窩、趾間、耳介内側" /></label>
+          <label class="span2">獣医師が認識した皮疹名（任意）<input id="vet_lesion" placeholder="例：丘疹、膿疱、表皮小環" /></label>
+          <label class="span2">過去の治療と反応<textarea id="treatment_history" placeholder="投薬、期間、反応、副作用など"></textarea></label>
+          <label>同居動物/人の皮疹<select id="contagion"><option value="">不明</option><option>なし</option><option>あり</option></select></label>
+          <label>消化器症状<select id="gi"><option value="">不明</option><option>なし</option><option>あり</option></select></label>
+          <label class="span2">食事歴<input id="diet" placeholder="主食、除去食歴、変更時期" /></label>
+          <label class="span2">全身症状・その他<textarea id="systemic" placeholder="基礎疾患、検査結果、薬剤歴など"></textarea></label>
+        </div>
+      </details>
+
       <button id="analyzeBtn" class="primary">解析する <span>→</span></button>
-      <p class="fineprint">本MVPは獣医師向け臨床意思決定支援です。画像のみで確定診断は行いません。具体的な数値用量は登録済みDrug Databaseと照合します。</p>
+      <p class="fineprint">カルテ読取では飼い主氏名・住所・電話番号・メール等は抽出対象から除外します。自動入力内容は解析前に必要に応じて確認・修正してください。</p>
     </section>
 
-    <section id="loading" class="panel loading hidden"><div class="spinner"></div><h2>臨床情報を統合しています</h2><p>皮疹形態 → 鑑別 → 追加検査 → Evidence / Drug Database照合</p></section>
+    <section id="loading" class="panel loading hidden"><div class="spinner"></div><h2>臨床情報を統合しています</h2><p>皮疹形態 → 病歴 → 鑑別 → 追加検査 → Evidence / Drug Database照合</p></section>
     <section id="results" class="results hidden"></section>
   </main>
-  <footer>Dog Derm AI MVP v0.3 · Clinical decision support for veterinary professionals</footer>
-  <script src="/static/app.js"></script>
-  <script src="/static/treatment-v03.js"></script>
+  <footer>Dog Derm AI v0.4 · Clinical decision support for veterinary professionals</footer>
+  <script src="/static/app.js?v=040"></script>
+  <script src="/static/treatment-v03.js?v=040"></script>
 </body>
 </html>
