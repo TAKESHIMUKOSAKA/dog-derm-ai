@@ -67,3 +67,13 @@ renderResults = function(d){
     </div>`;
   $('results').classList.remove('hidden'); $('shareBtn').addEventListener('click',shareResult); $('results').scrollIntoView({behavior:'smooth',block:'start'});
 };
+
+// v0.6 cloud sync is loaded independently so older installed PWAs can receive it without rewriting the whole shell.
+(() => {
+  if(!document.querySelector('link[href*="v06.css"]')){
+    const l=document.createElement('link'); l.rel='stylesheet'; l.href='/static/v06.css?v=060'; document.head.appendChild(l);
+  }
+  if(!document.querySelector('script[src*="cloud-v06.js"]')){
+    const s=document.createElement('script'); s.src='/static/cloud-v06.js?v=060'; s.defer=true; document.body.appendChild(s);
+  }
+})();
