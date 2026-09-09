@@ -16,16 +16,43 @@ from prompt import (
     load_drugs,
     load_evidence,
 )
-from schemas import DermAssessment
+from schemas import ChartExtraction, DermAssessment
 
 BASE = Path(__file__).parent
-app = FastAPI(title="Dog Derm AI MVP", version="0.3.0")
+app = FastAPI(title="Dog Derm AI MVP", version="0.4.0")
 app.mount("/static", StaticFiles(directory=BASE / "static"), name="static")
 
 EVIDENCE = load_evidence()
 EVIDENCE_BY_ID = {e["id"]: e for e in EVIDENCE}
 DRUGS = load_drugs()
 DRUG_BY_ID = {d["id"]: d for d in DRUGS}
+
+CHART_EXTRACTION_PROMPT = """
+You are a veterinary medical-record extractor for Dog Derm AI.
+Read the attached screenshots/photos of the SAME canine patient's medical chart and extract only information clearly supported by the chart.
+
+Rules:
+- Never invent or guess missing information. If unclear, return an empty string and add the field name to uncertain_fields.
+- Ignore owner/client personally identifying information completely: names, address, phone, email, membership/account IDs, payment information. Never return it.
+- The task is extraction and normalization, not diagnosis.
+- Use the most clinically relevant/current dermatology history when multiple visits are visible, while retaining useful prior treatment/response in treatment_history.
+- Do not turn a suspected diagnosis into a confirmed fact. Lesion terms explicitly documented by a veterinarian may go in vet_lesion.
+- age: concise Japanese wording such as '3歳4か月'. If date of birth and visit date are both clearly visible, age may be calculated; note that in source_notes.
+- onset_age: only when directly stated or safely derivable from a clearly stated onset date plus DOB/age.
+- sex must be exactly one of: '', '未去勢雄', '去勢雄', '未避妊雌', '避妊雌'.
+- course must be exactly one of: '', '初発・急性', '慢性', '再発性', '徐々に悪化'.
+- pruritus must be exactly one of: '', 'なし', '軽度', '中等度', '重度'. Do not infer severity from medication alone.
+- pvas: digits only if a pVAS/pruritus score is explicitly documented.
+- itch_order must be exactly one of: '', '痒みが先', '皮疹が先', 'ほぼ同時'.
+- seasonality must be exactly one of: '', 'なし', 'あり', '通年性'.
+- contagion and gi must each be exactly one of: '', 'なし', 'あり'.
+- prevention: flea/tick prevention product, adherence, timing, etc.
+- distribution: body sites affected by dermatologic lesions/pruritus.
+- treatment_history: concise chronology of dermatology-relevant treatment, doses if clearly readable, duration, and response/adverse effects. Do not correct doses from memory.
+- systemic: relevant comorbidities, systemic signs, medications, and test results that may affect dermatologic reasoning.
+- summary: 1-3 short Japanese sentences summarizing what was extracted, without owner PII and without adding diagnoses not documented.
+- source_notes: short notes about derivations, contradictions, or image-quality limitations.
+""".strip()
 
 
 def access_protected() -> bool:
@@ -67,7 +94,7 @@ def health():
         "evidence_count": len(EVIDENCE),
         "drug_count": len(DRUGS),
         "protected": access_protected(),
-        "version": "0.3.0",
+        "version": "0.4.0",
     }
 
 
@@ -92,6 +119,65 @@ def drugs(x_app_key: Annotated[str | None, Header(alias="X-App-Key")] = None):
 def as_data_url(data: bytes, content_type: str | None) -> str:
     mime = content_type if content_type and content_type.startswith("image/") else "image/jpeg"
     return f"data:{mime};base64,{base64.b64encode(data).decode('ascii')}"
+
+
+async def uploaded_images_to_content(images: list[UploadFile], max_images: int, label: str) -> list[dict]:
+    if not images:
+        raise HTTPException(status_code=400, detail=f"{label}を1枚以上追加してください")
+    if len(images) > max_images:
+        raise HTTPException(status_code=400, detail=f"{label}は最大{max_images}枚です")
+
+    content = []
+    allowed = {"image/jpeg", "image/png", "image/webp", "image/gif"}
+    for img in images:
+        data = await img.read()
+        if len(data) > 12 * 1024 * 1024:
+            raise HTTPException(status_code=400, detail=f"{img.filename}: 12MBを超えています")
+        if img.content_type not in allowed:
+            raise HTTPException(status_code=400, detail=f"{img.filename}: JPEG/PNG/WebP/GIFに変換してから送信してください")
+        content.append({
+            "type": "input_image",
+            "image_url": as_data_url(data, img.content_type),
+            "detail": "high",
+        })
+    return content
+
+
+@app.post("/api/extract-chart")
+async def extract_chart(
+    chart_images: Annotated[list[UploadFile], File(...)],
+    x_app_key: Annotated[str | None, Header(alias="X-App-Key")] = None,
+):
+    require_access(x_app_key)
+    image_content = await uploaded_images_to_content(chart_images, 4, "カルテ画像")
+
+    if not os.getenv("OPENAI_API_KEY"):
+        raise HTTPException(status_code=503, detail="カルテ自動入力にはAI接続が必要です")
+
+    content = [{
+        "type": "input_text",
+        "text": "添付したカルテ画像から、Dog Derm AIの患者情報・病歴フォームを自動入力するための情報を抽出してください。複数枚は同一症例です。",
+    }] + image_content
+
+    try:
+        from openai import OpenAI
+        client = OpenAI()
+        response = client.responses.parse(
+            model=os.getenv("OPENAI_MODEL", "gpt-5.6"),
+            reasoning={"effort": os.getenv("OPENAI_CHART_REASONING_EFFORT", "low")},
+            input=[
+                {"role": "system", "content": CHART_EXTRACTION_PROMPT},
+                {"role": "user", "content": content},
+            ],
+            text_format=ChartExtraction,
+        )
+    except Exception as e:
+        raise HTTPException(status_code=502, detail=f"カルテ読取に失敗しました: {type(e).__name__}: {e}") from e
+
+    parsed = response.output_parsed
+    if parsed is None:
+        raise HTTPException(status_code=502, detail="カルテから構造化情報を取得できませんでした")
+    return parsed.model_dump()
 
 
 def clean_evidence_links(payload: dict) -> dict:
@@ -134,7 +220,6 @@ def enforce_drug_database(payload: dict) -> dict:
             )
 
         if selected:
-            # Never trust generated numeric text: overwrite with the verified database record.
             t["dose"] = selected.get("dose", "用量未検証")
             t["route"] = selected.get("route", "")
             t["frequency"] = selected.get("frequency", "")
@@ -156,7 +241,6 @@ def enforce_drug_database(payload: dict) -> dict:
                 prefix = "登録済みレジメン"
             t["dose_evidence_note"] = f"{prefix}。Dose source: {source_id}".strip()
         else:
-            # Any numeric regimen not traceable to a DB entry is removed.
             if _has_number(t.get("dose")) or _has_number(t.get("frequency")) or _has_number(t.get("initial_duration")):
                 t["dose"] = "用量未検証"
                 t["route"] = t.get("route", "")
@@ -233,24 +317,7 @@ async def analyze(
     except json.JSONDecodeError as e:
         raise HTTPException(status_code=400, detail="patient_json is invalid") from e
 
-    if not images:
-        raise HTTPException(status_code=400, detail="少なくとも1枚の画像が必要です")
-    if len(images) > 6:
-        raise HTTPException(status_code=400, detail="画像は最大6枚です")
-
-    image_content = []
-    allowed = {"image/jpeg", "image/png", "image/webp", "image/gif"}
-    for img in images:
-        data = await img.read()
-        if len(data) > 12 * 1024 * 1024:
-            raise HTTPException(status_code=400, detail=f"{img.filename}: 12MBを超えています")
-        if img.content_type not in allowed:
-            raise HTTPException(status_code=400, detail=f"{img.filename}: JPEG/PNG/WebP/GIFに変換してから送信してください")
-        image_content.append({
-            "type": "input_image",
-            "image_url": as_data_url(data, img.content_type),
-            "detail": "high",
-        })
+    image_content = await uploaded_images_to_content(images, 6, "皮疹画像")
 
     if not os.getenv("OPENAI_API_KEY"):
         return demo_assessment(patient)
