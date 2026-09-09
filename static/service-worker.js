@@ -1,7 +1,7 @@
-const CACHE = 'dog-derm-ai-shell-v04';
+const CACHE = 'dog-derm-ai-shell-v05';
 const SHELL = [
   '/', '/static/styles.css', '/static/v03.css', '/static/app.js', '/static/treatment-v03.js', '/manifest.webmanifest',
-  '/static/icons/dog-derm-ai-192.jpg'
+  '/static/icons/dog-derm-ai-192.jpg', '/static/icons/apple-touch-icon.png'
 ];
 self.addEventListener('install', event => {
   event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(SHELL)).then(() => self.skipWaiting()));
