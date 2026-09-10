@@ -1,0 +1,65 @@
+[
+  {
+    "id": "SUPERFICIAL_PYODERMA",
+    "name": "表在性膿皮症",
+    "english": "Canine superficial pyoderma / superficial bacterial folliculitis",
+    "aliases": ["表在性膿皮症", "表在性細菌性毛包炎", "superficial pyoderma", "superficial bacterial folliculitis", "bacterial folliculitis"],
+    "summary": "犬の皮膚表層〜毛包に生じる細菌感染。再発例ではアレルギー、寄生虫、内分泌疾患などの基礎疾患を検索する。",
+    "diagnosis": [
+      "抗菌治療前に皮膚細胞診を行い、細菌・炎症細胞を確認する。",
+      "再発例、直近6か月の反復抗菌薬使用、MRSP既往、適切な全身治療5〜7日で改善しない場合などは培養・感受性試験を強く検討する。",
+      "表面性・表在性・深在性の深度を皮疹形態と疼痛・排膿などから区別する。"
+    ],
+    "treatments": [
+      {"title":"第一選択：局所抗菌療法","detail":"広範囲では2〜4%クロルヘキシジンシャンプーを週2〜3回以上、10〜15分接触。局所病変では2〜4%クロルヘキシジンのワイプ・スプレー・フォームを1日1回など。","source":"Drug DB: CHLORHEXIDINE_TOPICAL / ISCAID 2025"},
+      {"title":"全身抗菌薬","detail":"局所療法だけで十分な効果が得られない、または実施が難しい場合に限定して検討。薬剤選択は耐性リスクと培養・感受性結果を重視する。","source":"ISCAID 2025"},
+      {"title":"基礎疾患の管理","detail":"再発性では犬アトピー性皮膚炎、食物アレルギー、外部寄生虫、内分泌疾患などを評価し、再発要因を同時に管理する。","source":"ISCAID 2025"}
+    ],
+    "duration": "局所療法は2〜3週で再評価。多くの症例で1〜2週以内に改善がみられ、3〜4週で病変消失が期待される。全身抗菌薬を用いる場合はまず2週間処方し、終了前に再診して継続の要否を判断する。臨床的感染病変が消失したら漫然と延長しない。",
+    "reassessment": ["局所療法：2〜3週で再診。","全身抗菌薬：2週の終了前に再評価。","新規病変の出現、反応不良、再発では細胞診を再確認し、必要に応じ培養・感受性試験と基礎疾患検索。"],
+    "pitfalls": ["膿皮症という診断名だけで抗菌薬を自動選択しない。","深在性膿皮症や無菌性疾患を見逃さない。","再発時は感染だけでなく背景疾患を必ず再評価する。"],
+    "evidence": [{"id":"ISCAID_PYODERMA_2025","citation":"Loeffler A, et al. Vet Dermatol. 2025;36(3):234-282. doi:10.1111/vde.13342","url":"https://pubmed.ncbi.nlm.nih.gov/40338805/"}],
+    "owner_pdf": "/static/owner-guides/owner_superficial_pyoderma.pdf"
+  },
+  {
+    "id": "CANINE_ATOPIC_DERMATITIS",
+    "name": "犬アトピー性皮膚炎",
+    "english": "Canine atopic dermatitis (CAD)",
+    "aliases": ["犬アトピー性皮膚炎", "アトピー性皮膚炎", "canine atopic dermatitis", "atopic dermatitis", "CAD"],
+    "summary": "慢性・再発性の掻痒性アレルギー性皮膚疾患。診断は臨床診断であり、類似疾患・重複疾患を除外したうえで長期の多面的管理を行う。",
+    "diagnosis": ["ノミ・疥癬などの寄生虫、細菌・Malassezia感染などを症例に応じて除外・治療する。","通年性掻痒や消化器症状などがある場合は、適切な除去食試験を検討する。","アレルギー検査はCADそのものを診断する検査ではなく、主にアレルゲン免疫療法のアレルゲン選択などに用いる。"],
+    "treatments": [
+      {"title":"急性増悪・速やかな掻痒コントロール","detail":"オクラシチニブ、ロキベトマブ、症例に応じたグルココルチコイドなどを選択。二次感染や増悪因子があれば同時に治療する。","source":"ICADA / Drug DB: OCLACITINIB, LOKIVETMAB"},
+      {"title":"長期管理","detail":"オクラシチニブ、ロキベトマブ、シクロスポリンなどを患者背景・反応・安全性に応じて選択し、スキンケアと感染管理を併用する。","source":"ICADA / Japanese labels / Drug Database"},
+      {"title":"疾患修飾：アレルゲン免疫療法","detail":"臨床的にCADと診断し、関連アレルゲンを治療選択のために同定した症例ではアレルゲン免疫療法を検討できる。効果判定には時間を要する。","source":"AIT systematic review 2023"}
+    ],
+    "drug_examples": ["オクラシチニブ：日本承認用法 0.4 mg/kg PO BID、最長14日。その後継続時はSID。","ロキベトマブ：1 mg/kgを基準量としてSC、約1か月ごと。","シクロスポリン：日本承認の難治性CADでは5 mg/kg PO SIDを4週間導入し、改善後は間隔を調整。"],
+    "duration": "CADは基本的に長期管理する疾患。急性増悪は数日〜数週でコントロールを評価し、その後は最小限の維持治療へ調整する。シクロスポリンなど効果発現に数週を要する治療もある。アレルゲン免疫療法は数か月単位で効果を評価する。",
+    "reassessment": ["治療導入後1〜4週程度を目安に、使用薬剤に応じて掻痒・皮疹・二次感染を再評価。","安定後も耳炎・膿皮症・Malassezia皮膚炎などの再発を定期確認。","治療反応が悪い場合は診断の再確認、感染・寄生虫・食事・投薬遵守を再評価する。"],
+    "pitfalls": ["アレルギー検査陽性だけでCADと診断しない。","抗掻痒薬で痒みが減っても二次感染を見逃さない。","単剤固定ではなく、季節・重症度・感染の有無に応じて治療を組み替える。"],
+    "evidence": [
+      {"id":"ICADA_CAD_DIAGNOSIS_2015","citation":"Hensel P, et al. BMC Vet Res. 2015;11:196. doi:10.1186/s12917-015-0515-5","url":"https://pubmed.ncbi.nlm.nih.gov/26260508/"},
+      {"id":"ICADA_CAD_TREATMENT_2015","citation":"Olivry T, et al. BMC Vet Res. 2015;11:210. doi:10.1186/s12917-015-0514-6","url":"https://pubmed.ncbi.nlm.nih.gov/26276051/"},
+      {"id":"AIT_SYSTEMATIC_REVIEW_2023","citation":"Mueller RS. J Am Vet Med Assoc. 2023;261(S1):S30-S35. doi:10.2460/javma.22.12.0576","url":"https://pubmed.ncbi.nlm.nih.gov/36940185/"}
+    ],
+    "owner_pdf": "/static/owner-guides/owner_canine_atopic_dermatitis.pdf"
+  },
+  {
+    "id": "DERMATOPHYTOSIS",
+    "name": "皮膚糸状菌症",
+    "english": "Dermatophytosis",
+    "aliases": ["皮膚糸状菌症", "糸状菌症", "dermatophytosis", "Microsporum canis", "M. canis", "Trichophyton"],
+    "summary": "MicrosporumやTrichophytonなどによる皮膚・被毛の真菌感染症。人獣共通感染症であり、患者治療と環境管理を並行する。",
+    "diagnosis": ["皮疹だけで確定せず、毛検査・Wood灯・直接鏡検・真菌培養・PCRなどを組み合わせて診断する。","Wood灯陰性でも皮膚糸状菌症は除外できない。","治療終了は臨床所見だけでなく、真菌学的治癒を確認して判断する。"],
+    "treatments": [
+      {"title":"全身療法","detail":"全身性・多発性病変ではイトラコナゾールやテルビナフィンなどの全身性抗真菌薬を検討する。薬剤・用量・適応は製剤、年齢、肝機能、併用薬などを確認して個別に選択する。","source":"WAVD 2017"},
+      {"title":"全身的な外用療法","detail":"シャンプーやリンス等の外用療法を全身療法と併用し、被毛・皮膚表面の感染性物質を減らす。局所病変だけを塗るより全身的な外用管理が重要になることがある。","source":"WAVD 2017"},
+      {"title":"環境管理","detail":"感染毛や鱗屑を物理的に除去し、掃除と適切な消毒を継続する。多頭飼育では同居動物の検査・管理も検討する。","source":"WAVD 2017"}
+    ],
+    "duration": "治療は通常数週間以上を要する。見た目の改善だけで終了せず、臨床的治癒と真菌学的治癒を確認して終了する。治療期間は感染範囲、宿主因子、薬剤、環境汚染の程度によって変動する。",
+    "reassessment": ["治療中は皮疹・被毛の改善と真菌学的検査を定期的に評価。","新しい病変が増える場合は投薬遵守、薬剤選択、診断、同居動物、環境管理を見直す。","人に皮疹が出た場合は人獣共通感染症として医療機関への相談を案内する。"],
+    "pitfalls": ["Wood灯陰性だけで除外しない。","臨床的に毛が生えた時点で治療終了としない。","患者だけ治療して環境・同居動物の管理を忘れない。"],
+    "evidence": [{"id":"WAVD_DERMATOPHYTOSIS_2017","citation":"Moriello KA, et al. Vet Dermatol. 2017;28(3):266-e68. doi:10.1111/vde.12440","url":"https://pubmed.ncbi.nlm.nih.gov/28516493/"}],
+    "owner_pdf": "/static/owner-guides/owner_dermatophytosis.pdf"
+  }
+]
