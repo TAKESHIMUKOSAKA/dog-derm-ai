@@ -67,3 +67,13 @@ renderResults = function(d){
     </div>`;
   $('results').classList.remove('hidden'); $('shareBtn').addEventListener('click',shareResult); $('results').scrollIntoView({behavior:'smooth',block:'start'});
 };
+
+// v0.7 Disease Library loader. Kept isolated from case storage and cloud sync.
+(() => {
+  if(!document.querySelector('link[href*="disease-v07.css"]')){
+    const l=document.createElement('link'); l.rel='stylesheet'; l.href='/static/disease-v07.css?v=070'; document.head.appendChild(l);
+  }
+  if(!document.querySelector('script[src*="disease-v07.js"]')){
+    const s=document.createElement('script'); s.src='/static/disease-v07.js?v=070'; s.defer=true; document.body.appendChild(s);
+  }
+})();
