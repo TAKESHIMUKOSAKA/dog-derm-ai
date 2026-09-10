@@ -1,0 +1,1 @@
+Dog Derm AI owner guide asset chunks for canine atopic dermatitis v2. Generated from the approved A4 infographic. Parts are base64 of a PDF and are reassembled client-side.
