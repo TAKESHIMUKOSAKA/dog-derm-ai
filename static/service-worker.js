@@ -1,4 +1,4 @@
-const CACHE = 'dog-derm-ai-shell-v07';
+const CACHE = 'dog-derm-ai-shell-v08-recovery';
 const SHELL = [
   '/', '/static/styles.css', '/static/v03.css', '/static/v04.css', '/static/v05.css',
   '/static/app.js', '/static/treatment-v03.js', '/static/case-v05.js', '/manifest.webmanifest',
